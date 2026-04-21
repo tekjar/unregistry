@@ -73,7 +73,7 @@ usage() {
     echo ""
     echo "Options:"
     echo "  -h, --help                Show this help message."
-    echo "  -F path                   Path to SSH config file."
+    echo "  -F, --ssh-config path     Path to SSH config file."
     echo "  -i, --ssh-key path        Path to SSH private key for remote login (if not already added to SSH agent)."
     echo "      --no-host-key-check   Skip SSH host key checking (use with caution)."
     echo "      --platform string     Push a specific platform for a multi-platform image (e.g., linux/amd64, linux/arm64)."
@@ -88,7 +88,7 @@ usage() {
     echo "  docker pussh myimage:latest user@host"
     echo "  docker pussh --platform linux/amd64 myimage host"
     echo "  docker pussh myimage:1.2.3 user@host:2222 -i ~/.ssh/id_ed25519"
-    echo "  docker pussh -F ~/.ssh/config.prod myimage:latest prod-server"
+    echo "  docker pussh --ssh-config ~/.ssh/config.prod myimage:latest prod-server"
     echo ""
     echo "  # Set custom docker binary path and containerd socket on remote host:"
     echo "  REMOTE_DOCKER_PATH=/usr/local/bin/docker REMOTE_CONTAINERD_SOCKET=/var/run/docker/containerd/containerd.sock \\"
@@ -397,9 +397,9 @@ fi
 help_command="Run 'docker pussh --help' for usage information."
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -F)
+        -F|--ssh-config)
             if [[ -z "${2:-}" ]]; then
-                error "-F option requires an argument.\n${help_command}"
+                error "-F/--ssh-config option requires an argument.\n${help_command}"
             fi
             SSH_CONFIG="$2"
             shift 2
